@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conversao-distancia
+# Especificação do Deployment
+spec:
+  replicas: 1
+  # Marcação de objetivo com a tag de identificação chave-valor (Match com os Pods)
+  selector:
+    matchLabels:
+      app: conversao-distancia
+  # Declarar o template do Pod
+  template:
+    metadata:
+      labels:
+        app: conversao-distancia
+    # Dedinfir as especificações dos Pods
+    spec:
+      containers:
+      - name: conversao-distancia
+        image: rodrigoafonso/conversao-distancia:v3
+        ports:
+          - containerPort: 5000
+
+---
+# Definindo o Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: conversao-distancia
+spec:
+  selector:
+    app: conversao-distancia
+  ports:
+  - port: 80
+    targetPort: 5000
+    nodePort: 30000
+  type: NodePort
